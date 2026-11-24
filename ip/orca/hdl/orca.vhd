@@ -543,7 +543,7 @@ begin
       WRITE_FIRST_SUPPORTED => false,  --May be able to enable on some families
       --to save bypass logic
 
-      WISHBONE_SINGLE_CYCLE_READS => false,  --For now assumed not supported; can
+      WISHBONE_SINGLE_CYCLE_READS => true,  --For now assumed not supported; can
                                         --be brought to top level if needed
       MAX_IFETCHES_IN_FLIGHT      => MAX_IFETCHES_IN_FLIGHT,
       MAX_OUTSTANDING_REQUESTS    => MAX_OUTSTANDING_REQUESTS,

@@ -13,6 +13,7 @@ static inline void UART_INIT(){
 }
 
 static inline void UART_PUTC(void *base_address, char data){
+  *(volatile char*)0x20000000 = data;
 }
 
 static inline bool UART_BUSY(void *base_address){

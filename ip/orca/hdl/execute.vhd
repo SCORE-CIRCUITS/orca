@@ -652,6 +652,8 @@ begin
     variable shadow_registers : register_list := (others => (others => '0'));
 
     constant DEBUG_WRITEBACK : boolean := false;
+    constant DEBUG_EXECUTE   : boolean := false;
+    variable printed_count   : integer := 0;
 
   begin
     if rising_edge(clk) then
@@ -673,7 +675,8 @@ begin
       end if;
 
 
-      if to_execute_valid = '1' then
+      if to_execute_valid = '1' and printed_count < 100 then
+        printed_count := printed_count + 1;
         write(my_line, string'("executing pc = "));   -- formatting
         hwrite(my_line, (std_logic_vector(to_execute_program_counter)));  -- format type std_logic_vector as hex
         write(my_line, string'(" instr =  "));        -- formatting
@@ -684,7 +687,10 @@ begin
         end if;
 
         if from_execute_ready = '0' then
-          write(my_line, string'(" stalling"));  -- formatting
+          write(my_line, string'(" stalling rs1="));
+          hwrite(my_line, to_execute_rs1_data);
+          write(my_line, string'(" wb_rdy=" & std_logic'image(from_writeback_ready)));
+          write(my_line, string'(" lsu_rdy=" & std_logic'image(from_lsu_ready)));
         else
           last_valid_pc := to_execute_program_counter;
         end if;

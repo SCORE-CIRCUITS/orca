@@ -420,7 +420,7 @@ begin
           mstatus(CSR_MSTATUS_MPIE)       <= '0';
           mepc                            <= (others => '0');
           mcause(mcause'left)             <= '0';
-          mcause_exc_code                 <= (others => '0');
+          mcause(CSR_MCAUSE_CODE'range)   <= (others => '0');
           meimask_full                    <= (others => '0');
         end if;
         mepc(1 downto 0) <= "00";

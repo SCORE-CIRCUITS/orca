@@ -19,6 +19,9 @@ _start:
 
   jal main
 
+  li t0, 0x20000004
+  sw a0, 0(t0)
+
 1:
   j 1b
 

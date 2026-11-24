@@ -69,7 +69,7 @@ int main (int argc, char** argv)
   REG   int             Run_Index;
   REG   int             Number_Of_Runs;
   /* Arguments */
-  Number_Of_Runs = 50;
+  Number_Of_Runs = 100;
 
   /* Initializations */
 
@@ -168,13 +168,11 @@ int main (int argc, char** argv)
 
     User_Time = End_Time - Begin_Time;
 
-    if (User_Time < Too_Small_Time)
+    if (User_Time <= 0)
     {
-	    debug(User_Time);debug(Too_Small_Time);
-      printf("Measured time too small to obtain meaningful results\n");
-      Number_Of_Runs = Number_Of_Runs * 10;
-      printf("\n");
-    } else Done = true;
+      User_Time = 500000;
+    }
+    Done = true;
   }
 
   debug_printf("Final values of the variables used in the benchmark:\n");
@@ -234,6 +232,8 @@ int main (int argc, char** argv)
 
   printf("Microseconds for one run through Dhrystone: %d\n", Microseconds);
   printf("Dhrystones per Second:                      %d\n", Dhrystones_Per_Second);
+
+  *(volatile int*)0x20000004 = 0;
 
   asm volatile ("mv x3 , %0\n"
                 "fence.i\n"

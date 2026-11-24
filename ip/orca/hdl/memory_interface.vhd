@@ -1090,22 +1090,18 @@ begin
       if rising_edge(clk) then
         delayed_readdata      <= data_DAT_I;
         delayed_readdatavalid <= '0';
-        if data_ACK_I = '1' then
-          reading <= '0';
-          writing <= '0';
-        end if;
-        if daux_oimm_waitrequest = '0' then
-          --Allow one ACK in flight.  Must delay single cycle reads to conform
-          --to OIMM spec (readdatavalid can't come back on the same cycle as
-          --read is asserted).
-          if awaiting_ack = '0' and data_ACK_I = '1' then
-            delayed_readdatavalid <= daux_oimm_readnotwrite and daux_oimm_requestvalid;
+        if daux_oimm_waitrequest = '0' and daux_oimm_requestvalid = '1' then
+          if data_ACK_I = '1' then
+            delayed_readdatavalid <= daux_oimm_readnotwrite;
             reading               <= '0';
             writing               <= '0';
           else
-            reading <= daux_oimm_readnotwrite and daux_oimm_requestvalid;
-            writing <= (not daux_oimm_readnotwrite) and daux_oimm_requestvalid;
+            reading <= daux_oimm_readnotwrite;
+            writing <= not daux_oimm_readnotwrite;
           end if;
+        elsif data_ACK_I = '1' then
+          reading <= '0';
+          writing <= '0';
         end if;
 
         if reset = '1' then
